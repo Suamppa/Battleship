@@ -2,24 +2,21 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour {
+    // The grid of the game board
+    public int[,] GameBoard { get; private set; }
     // Set the size of the board
     public int boardSizeX;
     public int boardSizeY;
-    // Set the tile to be used
-    // public TileBase tile;
     // Optional reference to a camera to set to the center of the board
     public Transform sceneCamera;
 
-    // Reference to the tilemap
-    // private Tilemap tilemap;
-
     private void Start() {
-        // tilemap = GetComponent<Tilemap>();
+        InitializeBoard();
         Tilemap[] layers = GetComponentsInChildren<Tilemap>();
         foreach (Tilemap layer in layers) {
             TileBase tile = layer.GetTile(new Vector3Int(0, 0, 0));
             Debug.Log("Drawing layer " + layer.name + " with tile " + tile.name);
-            GenerateBoard(layer, tile);
+            DrawBoard(layer, tile);
         }
 
         if (sceneCamera != null) {
@@ -27,7 +24,16 @@ public class GridManager : MonoBehaviour {
         }
     }
 
-    private void GenerateBoard(Tilemap tilemap, TileBase tile) {
+    private void InitializeBoard() {
+        GameBoard = new int[boardSizeX, boardSizeY];
+        for (int x = 0; x < boardSizeX; x++) {
+            for (int y = 0; y < boardSizeY; y++) {
+                GameBoard[x, y] = 0;
+            }
+        }
+    }
+
+    private void DrawBoard(Tilemap tilemap, TileBase tile) {
         for (int x = 0; x < boardSizeX; x++) {
             for (int y = 0; y < boardSizeY; y++) {
                 Vector3Int tilePosition = new(x, y, 0);
