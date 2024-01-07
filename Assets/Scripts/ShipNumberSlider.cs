@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,5 +17,11 @@ public class ShipNumberSlider : MonoBehaviour
 
     private void OnSliderValueChanged(float value) {
         handleText.text = value.ToString();
+    }
+
+    // Update slider bounds based on the selected board size
+    // The area of the grid should be at least twice the total area of the ships
+    public void UpdateBounds(int boardSizeX, int boardSizeY) {
+        int maxShipArea = boardSizeX * boardSizeY / 2;
     }
 }
