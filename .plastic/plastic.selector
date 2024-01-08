@@ -1,0 +1,4 @@
+repository "Battleship@Samppa_Alatalo@cloud"
+  path "/"
+    br "/main"
+    co "/main"
