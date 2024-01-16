@@ -2,34 +2,50 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class ToggleClickable : MonoBehaviour
 {
     private Button button;
     private TextMeshProUGUI buttonText;
 
-    private void Start() {
+    // Is the button clickable initially
+    public bool clickable = false;
+    // The alpha value (opacity) of the button text when enabled/disabled
+    public float enabledAlpha = 1f;
+    public float disabledAlpha = 0.5f;
+
+    private void Awake() {
         button = GetComponent<Button>();
         buttonText = GetComponentInChildren<TextMeshProUGUI>();
-        Disable();
+        if (buttonText == null) {
+            Debug.LogError("TextMeshProUGUI component is missing");
+            return;
+        }
+    }
+
+    private void Start() {
+        if (clickable) { 
+            Enable();
+        } else {
+            Disable();
+        }
     }
 
     public void Toggle() {
-        button.interactable = !button.interactable;
-
-        // Set the button text colour transparency
-        // Color textColor = buttonText.color;
-        // textColor.a = button.interactable ? 1f : 0.5f;
-        // buttonText.color = textColor;
-        buttonText.alpha = button.interactable ? 1f : 0.5f;
+        if (button.interactable) {
+            Disable();
+        } else {
+            Enable();
+        }
     }
 
     public void Disable() {
         button.interactable = false;
-        buttonText.alpha = 0.5f;
+        buttonText.alpha = disabledAlpha;
     }
 
     public void Enable() {
         button.interactable = true;
-        buttonText.alpha = 1f;
+        buttonText.alpha = enabledAlpha;
     }
 }

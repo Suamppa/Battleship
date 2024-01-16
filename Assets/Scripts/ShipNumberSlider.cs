@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Slider))]
 public class ShipNumberSlider : MonoBehaviour
 {
     private Slider slider;
@@ -9,17 +10,30 @@ public class ShipNumberSlider : MonoBehaviour
     // The smallest ship takes 2 cells per ship
     private const int ShipMinCellSize = 2;
 
-    public TMP_Dropdown boardWidthDropdown;
-    public TMP_Dropdown boardHeightDropdown;
+    public int Value {
+        get => (int) slider.value;
+        private set => slider.value = value;
+    }
+    
+    public BoardSizeDropdown boardWidthDropdown, boardHeightDropdown;
 
-    private void Start() {
+    private void Awake() {
         slider = GetComponent<Slider>();
         handleText = GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    private void Start() {
         slider.onValueChanged.AddListener(OnSliderValueChanged);
+        boardWidthDropdown.OnValueChanged += UpdateBounds;
+        boardHeightDropdown.OnValueChanged += UpdateBounds;
+
+        UpdateBounds();
     }
 
     private void OnDestroy() {
         slider.onValueChanged.RemoveListener(OnSliderValueChanged);
+        boardWidthDropdown.OnValueChanged -= UpdateBounds;
+        boardHeightDropdown.OnValueChanged -= UpdateBounds;
     }
 
     private void OnSliderValueChanged(float value) {
@@ -38,19 +52,20 @@ public class ShipNumberSlider : MonoBehaviour
     {
         // The maximum area the ships can take up on the board
         int maxShipArea = boardArea / 2;
+        // The maximum number of ships that can fit on the board
         int maxShipNumber = maxShipArea / ShipMinCellSize;
-        if (slider.value > maxShipNumber)
-        {
-            slider.value = maxShipNumber;
+        // If the current value is greater than the new max, set it to the new max
+        if (Value > maxShipNumber) {
+            Value = maxShipNumber;
         }
         slider.maxValue = maxShipNumber;
     }
 
     private int CalculateBoardArea()
     {
-        // 5 is added to the dropdown value because the dropdown starts at 0
-        int boardWidth = boardWidthDropdown.value + 5;
-        int boardHeight = boardHeightDropdown.value + 5;
+        int boardWidth = boardWidthDropdown.Value;
+        int boardHeight = boardHeightDropdown.Value;
+        Debug.Log($"Board area: {boardWidth} * {boardHeight} = {boardWidth * boardHeight}");
         return boardWidth * boardHeight;
     }
 }

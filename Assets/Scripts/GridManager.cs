@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour {
+    private Tilemap[] layers;
+
     // The grid of the game board
     public int[,] GameBoard { get; private set; }
     // Set the size of the board
@@ -10,9 +12,15 @@ public class GridManager : MonoBehaviour {
     // Optional reference to a camera to set to the center of the board
     public Transform sceneCamera;
 
+    private void Awake() {
+        layers = GetComponentsInChildren<Tilemap>();
+        if (layers == null) {
+            Debug.LogError("No Tilemap components found.");
+        }
+    }
+
     private void Start() {
         InitializeBoard();
-        Tilemap[] layers = GetComponentsInChildren<Tilemap>();
         foreach (Tilemap layer in layers) {
             TileBase tile = layer.GetTile(new Vector3Int(0, 0, 0));
             Debug.Log("Drawing layer " + layer.name + " with tile " + tile.name);
