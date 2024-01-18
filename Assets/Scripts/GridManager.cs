@@ -79,7 +79,10 @@ public class GridManager : MonoBehaviour {
 
     public void AlignCamera(float cameraOffsetX = 0f, float cameraOffsetY = 0f) {
         if (sceneCamera != null) {
-            Vector3 newPosition = new((boardSizeX / 2f) + cameraOffsetX, (boardSizeY / 2f) + cameraOffsetY, sceneCamera.position.z);
+            float x = (boardSizeX / 2f) + cameraOffsetX;
+            float y = (boardSizeY / 2f) + cameraOffsetY;
+            float z = sceneCamera.position.z;
+            Vector3 newPosition = new(x, y, z);
             sceneCamera.position = newPosition;
         }
     }
