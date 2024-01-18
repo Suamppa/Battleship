@@ -6,11 +6,14 @@ public class GridManager : MonoBehaviour {
     // The size of the board
     private int boardSizeX, boardSizeY;
 
-    public GameOptionsProvider gameOptions;
     // The grid of the game board
     public int[,] GameBoard { get; private set; }
+
+    public GameOptionsProvider gameOptions;
     // Optional reference to a camera to set to the center of the board
     public Transform sceneCamera;
+    // The tiles to use for each layer
+    public TileBase[] tiles;
 
     private void Awake() {
         layers = GetComponentsInChildren<Tilemap>();
@@ -20,6 +23,9 @@ public class GridManager : MonoBehaviour {
     }
 
     private void Start() {
+        if (tiles.Length < layers.Length) {
+            Debug.LogError("Not enough tiles for the layers.");
+        }
         UpdateBoardSize();
         ClearBoard();
     }
@@ -55,8 +61,9 @@ public class GridManager : MonoBehaviour {
         ClearBoard();
         UpdateBoardSize();
         InitializeBoard();
-        foreach (Tilemap layer in layers) {
-            TileBase tile = layer.GetTile(new Vector3Int(0, 0, 0));
+        for (int i = 0; i < layers.Length; i++) {
+            Tilemap layer = layers[i];
+            TileBase tile = tiles[i];
             Debug.Log("Drawing layer " + layer.name + " with tile " + tile.name);
             DrawLayer(layer, tile);
         }
