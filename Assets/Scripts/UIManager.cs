@@ -1,17 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // Class for controlling the UI flow within a scene
 public class UIManager : MonoBehaviour
 {
-    private int currentPanelIndex = 0;
-
     // public delegate void PanelSwitchedEventHandler();
     // public event PanelSwitchedEventHandler PanelSwitched;
 
+    // History of screens visited, item at the top is the current screen
+    private Stack<List<GameObject>> history;
+
     // Singleton instance
     public static UIManager Instance { get; private set; }
-    
-    public GameObject[] panels;
+    public List<GameObject> ActiveElements { get; private set; }
+
+    // Elements to activate on start
+    public GameObject[] initialElements;
 
     private void Awake() {
         // If the singleton hasn't been initialized yet
@@ -21,26 +25,73 @@ public class UIManager : MonoBehaviour
         else {
             Destroy(gameObject);
         }
+
+        ActiveElements = new();
+        history = new();
     }
 
     private void Start() {
-        foreach (GameObject panel in panels) {
-            panel.SetActive(false);
+        // Disable all children, then enable the initial elements
+        foreach (Transform child in transform) {
+            child.gameObject.SetActive(false);
         }
-        panels[currentPanelIndex].SetActive(true);
+        ActivateElements(initialElements);
     }
 
-    public void NextPanel() {
-        panels[currentPanelIndex].SetActive(false);
-        currentPanelIndex++;
-        panels[currentPanelIndex].SetActive(true);
-        // PanelSwitched?.Invoke();
+    public void ActivateElement(GameObject element) {
+        if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element)) {
+            element.SetActive(true);
+            ActiveElements.Add(element);
+            history.Push(new List<GameObject> { element });
+        } else {
+            Debug.LogError($"Screen {element.name} is not on the UI layer.");
+        }
     }
 
-    public void PreviousPanel() {
-        panels[currentPanelIndex].SetActive(false);
-        currentPanelIndex--;
-        panels[currentPanelIndex].SetActive(true);
-        // PanelSwitched?.Invoke();
+    public void ActivateElements(GameObject[] elements) {
+        foreach (GameObject element in elements) {
+            if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element)) {
+                element.SetActive(true);
+                ActiveElements.Add(element);
+            } else {
+                Debug.LogError($"Screen {element.name} is not on the UI layer.");
+            }
+        }
+        history.Push(new List<GameObject>(elements));
+    }
+
+    public void DeactivateElement(GameObject element) {
+        if (ActiveElements.Contains(element)) {
+            element.SetActive(false);
+            ActiveElements.Remove(element);
+        } else {
+            Debug.LogError($"Screen {element.name} is not active.");
+        }
+    }
+
+    public void DeactivateElements(GameObject[] elements) {
+        foreach (GameObject element in elements) {
+            DeactivateElement(element);
+        }
+    }
+
+    // Switches to the specified element, closing fromElement
+    public void SwitchToElement(GameObject fromElement, GameObject toElement) {
+        DeactivateElement(fromElement);
+        ActivateElement(toElement);
+    }
+
+    public void SwitchElements(GameObject[] fromElements, GameObject[] toElements) {
+        DeactivateElements(fromElements);
+        ActivateElements(toElements);
+    }
+
+    // Switches to the previous element in the history
+    public void GoBack() {
+        if (history.Count > 1) {
+            List<GameObject> fromElements = history.Pop();
+            List<GameObject> toElements = history.Peek();
+            SwitchElements(fromElements.ToArray(), toElements.ToArray());
+        }
     }
 }

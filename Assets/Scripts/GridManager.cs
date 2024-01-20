@@ -5,13 +5,12 @@ public class GridManager : MonoBehaviour {
     private Tilemap[] layers;
     // The size of the board
     private int boardSizeX, boardSizeY;
+    private Camera mainCamera;
 
     // The grid of the game board
     public int[,] GameBoard { get; private set; }
 
     public GameOptionsProvider gameOptions;
-    // Optional reference to a camera to set to the center of the board
-    public Transform sceneCamera;
     // The tiles to use for each layer
     public TileBase[] tiles;
 
@@ -20,6 +19,7 @@ public class GridManager : MonoBehaviour {
         if (layers == null) {
             Debug.LogError("No Tilemap components found.");
         }
+        mainCamera = Camera.main;
     }
 
     private void Start() {
@@ -64,7 +64,7 @@ public class GridManager : MonoBehaviour {
         for (int i = 0; i < layers.Length; i++) {
             Tilemap layer = layers[i];
             TileBase tile = tiles[i];
-            Debug.Log("Drawing layer " + layer.name + " with tile " + tile.name);
+            Debug.Log($"Drawing layer {layer.name} with tile {tile.name}");
             DrawLayer(layer, tile);
         }
 
@@ -78,12 +78,12 @@ public class GridManager : MonoBehaviour {
     }
 
     public void AlignCamera(float cameraOffsetX = 0f, float cameraOffsetY = 0f) {
-        if (sceneCamera != null) {
+        if (mainCamera != null) {
             float x = (boardSizeX / 2f) + cameraOffsetX;
             float y = (boardSizeY / 2f) + cameraOffsetY;
-            float z = sceneCamera.position.z;
+            float z = mainCamera.transform.position.z;
             Vector3 newPosition = new(x, y, z);
-            sceneCamera.position = newPosition;
+            mainCamera.transform.position = newPosition;
         }
     }
 }

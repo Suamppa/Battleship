@@ -1,0 +1,12 @@
+{
+    "name": "InputActions",
+    "maps": [
+        {
+            "name": "Setup",
+            "id": "03742d69-f2de-4b77-8de9-980e682b0df4",
+            "actions": [],
+            "bindings": []
+        }
+    ],
+    "controlSchemes": []
+}
