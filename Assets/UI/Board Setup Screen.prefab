@@ -977,9 +977,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8918191124365829273, guid: 80884b8192b678742b9f194f891ca48e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8918191124365829273, guid: 80884b8192b678742b9f194f891ca48e, type: 3}
       propertyPath: startButton
       value: 
-      objectReference: {fileID: 9101675427077131915}
+      objectReference: {fileID: 0}
     - target: {fileID: 9087632668162613704, guid: 80884b8192b678742b9f194f891ca48e, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -9,18 +9,21 @@ public class GameOptionsProvider : MonoBehaviour
     private const string NumberOfShipsKey = "numberOfShips";
 
     // Dictionary for holding the game options as a collection
-    private Dictionary<string, int> gameOptions;
+    private static Dictionary<string, int> gameOptions;
 
     // Singleton instance
     public static GameOptionsProvider Instance { get; private set; }
 
-    public BoardSizeDropdown boardWidthDropdown, boardHeightDropdown;
-    public ShipNumberSlider shipNumberSlider;
+    public const int minBoardLength = 5;
+    public const int minNumberOfShips = 1;
 
     // Individual properties for the game options
-    public int BoardWidth => boardWidthDropdown.Value;
-    public int BoardHeight => boardHeightDropdown.Value;
-    public int NumberOfShips => shipNumberSlider.Value;
+    public static int BoardWidth { get; private set; } = minBoardLength;
+    public static int BoardHeight { get; private set; } = minBoardLength;
+    public static int NumberOfShips { get; private set; } = minNumberOfShips;
+
+    public BoardSizeDropdown boardWidthDropdown, boardHeightDropdown;
+    public ShipNumberSlider shipNumberSlider;
 
     private void Awake() {
         // If the singleton hasn't been initialized yet
@@ -40,13 +43,13 @@ public class GameOptionsProvider : MonoBehaviour
         };
     }
     
-    public void UpdateGameOptions() {
+    public static void UpdateGameOptions() {
         gameOptions[BoardWidthKey] = BoardWidth;
         gameOptions[BoardHeightKey] = BoardHeight;
         gameOptions[NumberOfShipsKey] = NumberOfShips;
     }
 
-    public Dictionary<string, int> GetGameOptions() {
+    public static Dictionary<string, int> GetGameOptions() {
         UpdateGameOptions();
         return gameOptions;
     }

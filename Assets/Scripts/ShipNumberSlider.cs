@@ -5,10 +5,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class ShipNumberSlider : MonoBehaviour
 {
-    private Slider slider;
-    private TextMeshProUGUI handleText;
     // The smallest ship takes 2 cells per ship
     private const int ShipMinCellSize = 2;
+    
+    private Slider slider;
+    private TextMeshProUGUI handleText;
 
     public int Value {
         get => (int) slider.value;

@@ -8,11 +8,11 @@ public class UIManager : MonoBehaviour
     // public event PanelSwitchedEventHandler PanelSwitched;
 
     // History of screens visited, item at the top is the current screen
-    private Stack<List<GameObject>> history;
+    private static Stack<List<GameObject>> history;
 
     // Singleton instance
     public static UIManager Instance { get; private set; }
-    public List<GameObject> ActiveElements { get; private set; }
+    public static List<GameObject> ActiveElements { get; private set; }
 
     // Elements to activate on start
     public GameObject[] initialElements;
@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
         ActivateElements(initialElements);
     }
 
-    public void ActivateElement(GameObject element) {
+    public static void ActivateElement(GameObject element) {
         if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element)) {
             element.SetActive(true);
             ActiveElements.Add(element);
@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ActivateElements(GameObject[] elements) {
+    public static void ActivateElements(GameObject[] elements) {
         foreach (GameObject element in elements) {
             if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element)) {
                 element.SetActive(true);
@@ -60,7 +60,7 @@ public class UIManager : MonoBehaviour
         history.Push(new List<GameObject>(elements));
     }
 
-    public void DeactivateElement(GameObject element) {
+    public static void DeactivateElement(GameObject element) {
         if (ActiveElements.Contains(element)) {
             element.SetActive(false);
             ActiveElements.Remove(element);
@@ -69,25 +69,25 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void DeactivateElements(GameObject[] elements) {
+    public static void DeactivateElements(GameObject[] elements) {
         foreach (GameObject element in elements) {
             DeactivateElement(element);
         }
     }
 
     // Switches to the specified element, closing fromElement
-    public void SwitchToElement(GameObject fromElement, GameObject toElement) {
+    public static void SwitchToElement(GameObject fromElement, GameObject toElement) {
         DeactivateElement(fromElement);
         ActivateElement(toElement);
     }
 
-    public void SwitchElements(GameObject[] fromElements, GameObject[] toElements) {
+    public static void SwitchElements(GameObject[] fromElements, GameObject[] toElements) {
         DeactivateElements(fromElements);
         ActivateElements(toElements);
     }
 
     // Switches to the previous element in the history
-    public void GoBack() {
+    public static void GoBack() {
         if (history.Count > 1) {
             List<GameObject> fromElements = history.Pop();
             List<GameObject> toElements = history.Peek();

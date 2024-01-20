@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(TMP_Dropdown))]
 public class BoardSizeDropdown : MonoBehaviour
 {
-    private const int MinValue = 5;
+    private const int MinValue = GameOptionsProvider.minBoardLength;
     private TMP_Dropdown dropdown;
 
     public int Value { get; private set; } = MinValue;

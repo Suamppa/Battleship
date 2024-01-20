@@ -8,8 +8,8 @@ public class GameBoard : MonoBehaviour
     private RectTransform rectTransform;
 
     public List<BoardCell> Cells { get; private set; }
-    public int Height => GameOptionsProvider.Instance.BoardHeight;
-    public int Width => GameOptionsProvider.Instance.BoardWidth;
+    public int Height => GameOptionsProvider.BoardHeight;
+    public int Width => GameOptionsProvider.BoardWidth;
 
     public GameObject cellPrefab;
 

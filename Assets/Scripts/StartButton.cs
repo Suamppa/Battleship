@@ -20,7 +20,7 @@ public class StartButton : MonoBehaviour
         if (toElement != null && toElement.Length > 0) {
             // Other listeners are set in the inspector
             button.onClick.AddListener(() => {
-                UIManager.Instance.SwitchElements(fromElement, toElement);
+                UIManager.SwitchElements(fromElement, toElement);
             });
         }
     }

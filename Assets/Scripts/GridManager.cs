@@ -10,7 +10,6 @@ public class GridManager : MonoBehaviour {
     // The grid of the game board
     public int[,] GameBoard { get; private set; }
 
-    public GameOptionsProvider gameOptions;
     // The tiles to use for each layer
     public TileBase[] tiles;
 
@@ -31,8 +30,8 @@ public class GridManager : MonoBehaviour {
     }
 
     private void UpdateBoardSize() {
-        boardSizeX = gameOptions.BoardWidth;
-        boardSizeY = gameOptions.BoardHeight;
+        boardSizeX = GameOptionsProvider.BoardWidth;
+        boardSizeY = GameOptionsProvider.BoardHeight;
     }
 
     private void InitializeBoard() {
