@@ -1,15 +1,23 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Ship))]
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Image[] shipImages;
+    private Ship ship;
     private InputActions input;
+    private GraphicRaycaster raycaster;
+
+    // public static event Action ShipMoved;
 
     private void Awake() {
+        ship = GetComponent<Ship>();
         input = new InputActions();
+        raycaster = GetComponentInParent<GraphicRaycaster>();
     }
 
     private void OnPointerRotate(InputAction.CallbackContext context) {
@@ -35,10 +43,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             transform.SetParent(transform.root);
         }
         transform.transform.SetAsLastSibling();
-        shipImages = transform.GetComponentsInChildren<Image>();
-        foreach (Image image in shipImages) {
-            image.raycastTarget = false;
-        }
+        ship.DisableRaycastTargets();
     }
 
     public void OnDrag(PointerEventData eventData) {
@@ -55,9 +60,31 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         if (objectBelow == null || objectBelow.layer != LayerMask.NameToLayer("Board")) {
             Destroy(gameObject);
         } else if (eventData.pointerDrag != null) {
-            foreach (Image image in shipImages) {
-                image.raycastTarget = true;
+            OccupyCells();
+            if (ship != null) ship.EnableRaycastTargets();
+        }
+        // ShipMoved?.Invoke();
+    }
+
+    private void OccupyCells() {
+        List<RaycastResult> results = new();
+        List<BoardCell> cells = new();
+        foreach (Image cell in ship.ShipCells) {
+            PointerEventData pointerEventData = new(EventSystem.current) {
+                position = cell.transform.position
+            };
+            raycaster.Raycast(pointerEventData, results);
+        }
+
+        foreach (RaycastResult result in results) {
+            if (result.gameObject.TryGetComponent(out BoardCell cell)) {
+                if (cell.IsOccupied) {
+                    Destroy(gameObject);
+                    return;
+                }
+                cells.Add(cell);
             }
         }
+        ship.SetOccupiedCells(cells.ToArray());
     }
 }

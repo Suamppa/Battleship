@@ -333,6 +333,7 @@ GameObject:
   - component: {fileID: 6696473848447769374}
   - component: {fileID: 7641129753347368188}
   - component: {fileID: 4012796672178856575}
+  - component: {fileID: 3595762732232509840}
   m_Layer: 5
   m_Name: Cruiser
   m_TagString: Ship
@@ -405,5 +406,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46dd3271df3039548b6623fec0e9aa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3595762732232509840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7052912201406135057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a40c1863b7d2247a0edd1f21011161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
