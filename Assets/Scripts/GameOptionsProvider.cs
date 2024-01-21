@@ -44,9 +44,15 @@ public class GameOptionsProvider : MonoBehaviour
     }
     
     public static void UpdateGameOptions() {
+        BoardWidth = Instance.boardWidthDropdown.Value;
+        BoardHeight = Instance.boardHeightDropdown.Value;
+        NumberOfShips = Instance.shipNumberSlider.Value;
+
         gameOptions[BoardWidthKey] = BoardWidth;
         gameOptions[BoardHeightKey] = BoardHeight;
         gameOptions[NumberOfShipsKey] = NumberOfShips;
+        
+        Debug.Log($"Game options updated");
     }
 
     public static Dictionary<string, int> GetGameOptions() {
