@@ -18,24 +18,4 @@ public class BoardCell : MonoBehaviour, IDropHandler
             Destroy(droppedObject);
         }
     }
-
-    private void AlignToCell(GameObject gameObject, PointerEventData eventData) {
-        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-        Vector2 pointerOffset = (Vector2) rectTransform.position - eventData.position;
-
-        Transform nearestCell = null;
-        float minDistance = float.MaxValue;
-        foreach (Transform child in transform) {
-            float distance = Vector2.Distance(child.position, eventData.position);
-            if (child.CompareTag("Ship") && distance < minDistance) {
-                minDistance = distance;
-                nearestCell = child;
-            }
-        }
-
-        Vector2 cellOffset = nearestCell.position - rectTransform.position;
-        Vector2 finalOffset = pointerOffset - cellOffset;
-
-        rectTransform.position += (Vector3) finalOffset;
-    }
 }
