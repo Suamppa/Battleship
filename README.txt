@@ -1,5 +1,6 @@
 Battleship project by Samppa Alatalo, 2207843
 For the course User Interface Programming at the University of Turku.
+https://github.com/Suamppa/Battleship
 
 This unfinished project is the start of a Battleship game. Currently it only features setup stages, which I focused on getting done first due to the nature of the course. I picked Unity for the project because it is what I'm currently most familiar with when it comes to the frontend.
 
