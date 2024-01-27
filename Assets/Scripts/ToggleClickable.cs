@@ -14,37 +14,49 @@ public class ToggleClickable : MonoBehaviour
     public float enabledAlpha = 1f;
     public float disabledAlpha = 0.5f;
 
-    private void Awake() {
+    private void Awake()
+    {
         button = GetComponent<Button>();
         buttonText = GetComponentInChildren<TextMeshProUGUI>();
-        if (buttonText == null) {
+        if (buttonText == null)
+        {
             Debug.LogError("TextMeshProUGUI component is missing");
             return;
         }
     }
 
-    private void Start() {
-        if (clickable) { 
+    private void Start()
+    {
+        if (clickable)
+        {
             Enable();
-        } else {
+        }
+        else
+        {
             Disable();
         }
     }
 
-    public void Toggle() {
-        if (button.interactable) {
+    public void Toggle()
+    {
+        if (button.interactable)
+        {
             Disable();
-        } else {
+        }
+        else
+        {
             Enable();
         }
     }
 
-    public void Disable() {
+    public void Disable()
+    {
         button.interactable = false;
         buttonText.alpha = disabledAlpha;
     }
 
-    public void Enable() {
+    public void Enable()
+    {
         button.interactable = true;
         buttonText.alpha = enabledAlpha;
     }

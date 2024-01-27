@@ -7,23 +7,26 @@ public class ShipNumberSlider : MonoBehaviour
 {
     // The smallest ship takes 2 cells per ship
     private const int ShipMinCellSize = 2;
-    
+
     private Slider slider;
     private TextMeshProUGUI handleText;
 
-    public int Value {
-        get => (int) slider.value;
+    public int Value
+    {
+        get => (int)slider.value;
         private set => slider.value = value;
     }
-    
+
     public BoardSizeDropdown boardWidthDropdown, boardHeightDropdown;
 
-    private void Awake() {
+    private void Awake()
+    {
         slider = GetComponent<Slider>();
         handleText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    private void Start() {
+    private void Start()
+    {
         slider.onValueChanged.AddListener(OnSliderValueChanged);
         boardWidthDropdown.OnValueChanged += UpdateBounds;
         boardHeightDropdown.OnValueChanged += UpdateBounds;
@@ -31,13 +34,15 @@ public class ShipNumberSlider : MonoBehaviour
         UpdateBounds();
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         slider.onValueChanged.RemoveListener(OnSliderValueChanged);
         boardWidthDropdown.OnValueChanged -= UpdateBounds;
         boardHeightDropdown.OnValueChanged -= UpdateBounds;
     }
 
-    private void OnSliderValueChanged(float value) {
+    private void OnSliderValueChanged(float value)
+    {
         handleText.text = value.ToString();
     }
 
@@ -56,7 +61,8 @@ public class ShipNumberSlider : MonoBehaviour
         // The maximum number of ships that can fit on the board
         int maxShipNumber = maxShipArea / ShipMinCellSize;
         // If the current value is greater than the new max, set it to the new max
-        if (Value > maxShipNumber) {
+        if (Value > maxShipNumber)
+        {
             Value = maxShipNumber;
         }
         slider.maxValue = maxShipNumber;

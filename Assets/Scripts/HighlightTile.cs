@@ -5,7 +5,8 @@ public class HighlightTile : MonoBehaviour
     // Object to use as a highlight
     public GameObject highlight;
 
-    void OnMouseEnter() {
+    void OnMouseEnter()
+    {
         highlight.SetActive(true);
     }
 

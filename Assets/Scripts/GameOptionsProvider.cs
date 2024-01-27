@@ -25,25 +25,30 @@ public class GameOptionsProvider : MonoBehaviour
     public BoardSizeDropdown boardWidthDropdown, boardHeightDropdown;
     public ShipNumberSlider shipNumberSlider;
 
-    private void Awake() {
+    private void Awake()
+    {
         // If the singleton hasn't been initialized yet
-        if (Instance == null) {
+        if (Instance == null)
+        {
             Instance = this;
         }
-        else {
+        else
+        {
             Destroy(gameObject);
         }
     }
 
-    private void Start() {
+    private void Start()
+    {
         gameOptions = new() {
             {BoardWidthKey, BoardWidth},
             {BoardHeightKey, BoardHeight},
             {NumberOfShipsKey, NumberOfShips}
         };
     }
-    
-    public static void UpdateGameOptions() {
+
+    public static void UpdateGameOptions()
+    {
         BoardWidth = Instance.boardWidthDropdown.Value;
         BoardHeight = Instance.boardHeightDropdown.Value;
         NumberOfShips = Instance.shipNumberSlider.Value;
@@ -51,11 +56,12 @@ public class GameOptionsProvider : MonoBehaviour
         gameOptions[BoardWidthKey] = BoardWidth;
         gameOptions[BoardHeightKey] = BoardHeight;
         gameOptions[NumberOfShipsKey] = NumberOfShips;
-        
+
         Debug.Log($"Game options updated");
     }
 
-    public static Dictionary<string, int> GetGameOptions() {
+    public static Dictionary<string, int> GetGameOptions()
+    {
         UpdateGameOptions();
         return gameOptions;
     }

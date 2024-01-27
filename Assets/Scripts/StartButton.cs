@@ -8,24 +8,30 @@ public class StartButton : MonoBehaviour
     private GameObject[] fromElement, toElement;
     private Button button;
 
-    private void Awake() {
+    private void Awake()
+    {
         button = GetComponent<Button>();
     }
 
-    private void Start() {
+    private void Start()
+    {
         // If fromElement is not specified, use the parent of the button
-        if (fromElement == null || fromElement.Length == 0) {
+        if (fromElement == null || fromElement.Length == 0)
+        {
             fromElement = new GameObject[] { transform.parent.gameObject };
         }
-        if (toElement != null && toElement.Length > 0) {
+        if (toElement != null && toElement.Length > 0)
+        {
             // Other listeners are set in the inspector
-            button.onClick.AddListener(() => {
+            button.onClick.AddListener(() =>
+            {
                 UIManager.SwitchElements(fromElement, toElement);
             });
         }
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         button.onClick.RemoveAllListeners();
     }
 }

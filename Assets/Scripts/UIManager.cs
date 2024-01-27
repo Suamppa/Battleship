@@ -17,12 +17,15 @@ public class UIManager : MonoBehaviour
     // Elements to activate on start
     public GameObject[] initialElements;
 
-    private void Awake() {
+    private void Awake()
+    {
         // If the singleton hasn't been initialized yet
-        if (Instance == null) {
+        if (Instance == null)
+        {
             Instance = this;
         }
-        else {
+        else
+        {
             Destroy(gameObject);
         }
 
@@ -30,65 +33,89 @@ public class UIManager : MonoBehaviour
         history = new();
     }
 
-    private void Start() {
+    private void Start()
+    {
         // Disable all children, then enable the initial elements
-        foreach (Transform child in transform) {
-            child.gameObject.SetActive(false);
+        foreach (Transform child in transform)
+        {
+            if (!child.CompareTag("Persistent"))
+            {
+                child.gameObject.SetActive(false);
+            }
         }
         ActivateElements(initialElements);
     }
 
-    public static void ActivateElement(GameObject element) {
-        if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element)) {
+    public static void ActivateElement(GameObject element)
+    {
+        if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element))
+        {
             element.SetActive(true);
             ActiveElements.Add(element);
             history.Push(new List<GameObject> { element });
-        } else {
+        }
+        else
+        {
             Debug.LogError($"Screen {element.name} is not on the UI layer.");
         }
     }
 
-    public static void ActivateElements(GameObject[] elements) {
-        foreach (GameObject element in elements) {
-            if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element)) {
+    public static void ActivateElements(GameObject[] elements)
+    {
+        foreach (GameObject element in elements)
+        {
+            if (element.layer == LayerMask.NameToLayer("UI") && !ActiveElements.Contains(element))
+            {
                 element.SetActive(true);
                 ActiveElements.Add(element);
-            } else {
+            }
+            else
+            {
                 Debug.LogError($"Screen {element.name} is not on the UI layer.");
             }
         }
         history.Push(new List<GameObject>(elements));
     }
 
-    public static void DeactivateElement(GameObject element) {
-        if (ActiveElements.Contains(element)) {
+    public static void DeactivateElement(GameObject element)
+    {
+        if (ActiveElements.Contains(element))
+        {
             element.SetActive(false);
             ActiveElements.Remove(element);
-        } else {
+        }
+        else
+        {
             Debug.LogError($"Screen {element.name} is not active.");
         }
     }
 
-    public static void DeactivateElements(GameObject[] elements) {
-        foreach (GameObject element in elements) {
+    public static void DeactivateElements(GameObject[] elements)
+    {
+        foreach (GameObject element in elements)
+        {
             DeactivateElement(element);
         }
     }
 
     // Switches to the specified element, closing fromElement
-    public static void SwitchToElement(GameObject fromElement, GameObject toElement) {
+    public static void SwitchToElement(GameObject fromElement, GameObject toElement)
+    {
         DeactivateElement(fromElement);
         ActivateElement(toElement);
     }
 
-    public static void SwitchElements(GameObject[] fromElements, GameObject[] toElements) {
+    public static void SwitchElements(GameObject[] fromElements, GameObject[] toElements)
+    {
         DeactivateElements(fromElements);
         ActivateElements(toElements);
     }
 
     // Switches to the previous element in the history
-    public static void GoBack() {
-        if (history.Count > 1) {
+    public static void GoBack()
+    {
+        if (history.Count > 1)
+        {
             List<GameObject> fromElements = history.Pop();
             List<GameObject> toElements = history.Peek();
             SwitchElements(fromElements.ToArray(), toElements.ToArray());

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ship
   - BoardCell
+  - Persistent
   layers:
   - Default
   - TransparentFX

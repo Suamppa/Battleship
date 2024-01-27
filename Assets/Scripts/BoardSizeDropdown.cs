@@ -13,19 +13,23 @@ public class BoardSizeDropdown : MonoBehaviour
     // Event to replace TMP_Dropdown.onValueChanged to ensure the value is always correct
     public event Action OnValueChanged;
 
-    private void Awake() {
+    private void Awake()
+    {
         dropdown = GetComponent<TMP_Dropdown>();
     }
 
-    private void Start() {
+    private void Start()
+    {
         dropdown.onValueChanged.AddListener(UpdateValue);
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         dropdown.onValueChanged.RemoveListener(UpdateValue);
     }
 
-    private void UpdateValue(int value) {
+    private void UpdateValue(int value)
+    {
         // Dropdown value is 0-indexed, so add the minimum value to get the actual value
         Value = value + MinValue;
         Debug.Log($"{gameObject.name} value: {Value}");

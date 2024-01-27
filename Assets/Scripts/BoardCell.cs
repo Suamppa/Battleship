@@ -1,52 +1,41 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 // Class representing a cell on the game board
 public class BoardCell : MonoBehaviour, IDropHandler
 {
-    // private GraphicRaycaster raycaster;
+    // Equivalent cell on the ship layer of the board
+    private Transform shipLayerCell;
 
-    public bool IsOccupied { get; set; } = false;
+    // public bool IsOccupied { get; set; } = false;
+    public Ship Occupant { get; set; } = null;
 
-    // private void Awake() {
-    //     raycaster = GetComponentInParent<GraphicRaycaster>();
-    // }
+    private void Awake()
+    {
+        shipLayerCell = transform.parent.parent.GetChild(1).GetChild(transform.GetSiblingIndex());
+    }
 
-    // private void OnEnable() {
-    //     Draggable.ShipMoved += CheckForShip;
-    // }
-
-    // private void OnDisable() {
-    //     Draggable.ShipMoved -= CheckForShip;
-    // }
-
-    public void OnDrop(PointerEventData eventData) {
-        GameObject droppedObject = eventData.pointerDrag;
-        if (droppedObject == null) return;
-        if (!IsOccupied) {
-            droppedObject.transform.SetParent(transform);
-            droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        } else {
-            Destroy(droppedObject);
+    private void OnDestroy()
+    {
+        if (Occupant != null)
+        {
+            Destroy(Occupant.gameObject);
         }
     }
 
-    // public void CheckForShip() {
-    //     PointerEventData pointerEventData = new(EventSystem.current) {
-    //         position = transform.position
-    //     };
-    //     List<RaycastResult> results = new();
-    //     raycaster.Raycast(pointerEventData, results);
-
-    //     IsOccupied = false;
-    //     foreach (RaycastResult result in results) {
-    //         if (result.gameObject.CompareTag("Ship")) {
-    //             IsOccupied = true;
-    //             Debug.Log($"{gameObject.name} occupied");
-    //             break;
-    //         }
-    //     }
-    // }
+    // Called when a ship is dropped on the cell
+    public void OnDrop(PointerEventData eventData)
+    {
+        GameObject droppedObject = eventData.pointerDrag;
+        if (droppedObject == null) return;
+        if (Occupant == null)
+        {
+            droppedObject.transform.SetParent(shipLayerCell);
+            droppedObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
+        else
+        {
+            Destroy(droppedObject);
+        }
+    }
 }

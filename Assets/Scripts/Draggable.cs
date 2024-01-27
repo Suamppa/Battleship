@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,81 +9,105 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 {
     private Ship ship;
     private InputActions input;
-    private GraphicRaycaster raycaster;
 
-    // public static event Action ShipMoved;
-
-    private void Awake() {
+    private void Awake()
+    {
         ship = GetComponent<Ship>();
         input = new InputActions();
-        raycaster = GetComponentInParent<GraphicRaycaster>();
     }
 
-    private void OnPointerRotate(InputAction.CallbackContext context) {
+    private void OnPointerRotate(InputAction.CallbackContext context)
+    {
         transform.Rotate(0, 0, context.ReadValue<Vector2>().normalized.y * 90);
     }
 
-    private void OnRotateCCW(InputAction.CallbackContext context) {
+    private void OnRotateCCW(InputAction.CallbackContext context)
+    {
         transform.Rotate(0, 0, 90);
     }
 
-    private void OnRotateCW(InputAction.CallbackContext context) {
+    private void OnRotateCW(InputAction.CallbackContext context)
+    {
         transform.Rotate(0, 0, -90);
     }
 
-    public void OnBeginDrag(PointerEventData eventData) {
-        Debug.Log($"{gameObject.name} OnBeginDrag");
+    private void EnableInput()
+    {
         input.Enable();
         input.Setup.PointerRotate.performed += OnPointerRotate;
         input.Setup.RotateCCW.performed += OnRotateCCW;
         input.Setup.RotateCW.performed += OnRotateCW;
-
-        if (transform.parent.gameObject.layer == LayerMask.NameToLayer("Board")) {
-            transform.SetParent(transform.root);
-        }
-        transform.transform.SetAsLastSibling();
-        ship.DisableRaycastTargets();
     }
 
-    public void OnDrag(PointerEventData eventData) {
-        transform.transform.position = eventData.position;
-    }
-
-    public void OnEndDrag(PointerEventData eventData) {
+    private void DisableInput()
+    {
         input.Setup.PointerRotate.performed -= OnPointerRotate;
         input.Setup.RotateCCW.performed -= OnRotateCCW;
         input.Setup.RotateCW.performed -= OnRotateCW;
         input.Disable();
-
-        GameObject objectBelow = eventData.pointerCurrentRaycast.gameObject;
-        if (objectBelow == null || objectBelow.layer != LayerMask.NameToLayer("Board")) {
-            Destroy(gameObject);
-        } else if (eventData.pointerDrag != null) {
-            OccupyCells();
-            if (ship != null) ship.EnableRaycastTargets();
-        }
-        // ShipMoved?.Invoke();
     }
 
-    private void OccupyCells() {
-        List<RaycastResult> results = new();
-        List<BoardCell> cells = new();
-        foreach (Image cell in ship.ShipCells) {
-            PointerEventData pointerEventData = new(EventSystem.current) {
-                position = cell.transform.position
-            };
-            raycaster.Raycast(pointerEventData, results);
-        }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log($"{gameObject.name} OnBeginDrag");
+        EnableInput();
+        ship.OnShipRemoved += DisableInput;
 
-        foreach (RaycastResult result in results) {
-            if (result.gameObject.TryGetComponent(out BoardCell cell)) {
-                if (cell.IsOccupied) {
+        if (transform.parent.gameObject.layer == LayerMask.NameToLayer("Board"))
+        {
+            transform.SetParent(transform.root);
+        }
+        transform.SetAsLastSibling();
+        ship.DisableRaycastTargets();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.position = eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        DisableInput();
+
+        // A speedier check to see if the pointer is over the board
+        GameObject objectBelow = eventData.pointerCurrentRaycast.gameObject;
+        if (objectBelow == null || objectBelow.layer != LayerMask.NameToLayer("Board"))
+        {
+            Destroy(gameObject);
+        }
+        else if (eventData.pointerDrag != null)
+        {
+            OccupyCells(); // This will destroy the ship if the cells are occupied
+            if (ship != null) ship.EnableRaycastTargets();
+        }
+    }
+
+    private void OccupyCells()
+    {
+        List<BoardCell> cells = new();
+        List<RaycastResult> results = ship.Raycast();
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.TryGetComponent(out BoardCell cell))
+            {
+                if (cell.Occupant != null)
+                {
                     Destroy(gameObject);
                     return;
                 }
                 cells.Add(cell);
             }
         }
-        ship.SetOccupiedCells(cells.ToArray());
+        // If the ship is too big for the drop area, destroy it
+        if (cells.Count < ship.ShipCells.Count)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            ship.SetOccupiedCells(cells.ToArray());
+        }
     }
 }
