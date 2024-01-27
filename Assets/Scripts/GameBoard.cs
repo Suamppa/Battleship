@@ -6,10 +6,8 @@ using UnityEngine;
 public class GameBoard : MonoBehaviour
 {
     private RectTransform gridTransform;
-    // private GridLayoutGroup gridLayoutGroup;
     // Separate ship layer prevents cell outlines clipping over ships
     private RectTransform shipLayerTransform;
-    // private GridLayoutGroup shipLayerLayoutGroup;
     // GameObject used to instantiate ship layer cells
     private GameObject shipLayerCell;
 
@@ -22,9 +20,7 @@ public class GameBoard : MonoBehaviour
     private void Awake()
     {
         gridTransform = transform.GetChild(0).GetComponent<RectTransform>();
-        // gridLayoutGroup = gridTransform.GetComponent<GridLayoutGroup>();
         shipLayerTransform = transform.GetChild(1).GetComponent<RectTransform>();
-        // shipLayerLayoutGroup = shipLayerTransform.GetComponent<GridLayoutGroup>();
         Cells = new(gridTransform.GetComponentsInChildren<BoardCell>());
 
         shipLayerCell = new("Cell", typeof(RectTransform));
@@ -59,11 +55,6 @@ public class GameBoard : MonoBehaviour
             gridCell.name = $"Cell {i}";
             Cells.Add(gridCell.GetComponent<BoardCell>());
         }
-
-        // gridLayoutGroup.CalculateLayoutInputHorizontal();
-        // gridLayoutGroup.CalculateLayoutInputVertical();
-        // shipLayerLayoutGroup.CalculateLayoutInputHorizontal();
-        // shipLayerLayoutGroup.CalculateLayoutInputVertical();
     }
 
     private void ResizeBoard()
