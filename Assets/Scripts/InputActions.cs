@@ -231,6 +231,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate CW"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ebb1885-57fc-420f-a78c-de6a01a749d7"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate CW"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
