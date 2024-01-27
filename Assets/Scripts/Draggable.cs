@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Ship))]
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Ship ship;
     private InputActions input;
+    private bool inputEnabled = false;
 
     private void Awake()
     {
@@ -37,6 +37,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         input.Setup.PointerRotate.performed += OnPointerRotate;
         input.Setup.RotateCCW.performed += OnRotateCCW;
         input.Setup.RotateCW.performed += OnRotateCW;
+        inputEnabled = true;
     }
 
     private void DisableInput()
@@ -45,6 +46,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         input.Setup.RotateCCW.performed -= OnRotateCCW;
         input.Setup.RotateCW.performed -= OnRotateCW;
         input.Disable();
+        inputEnabled = false;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -68,7 +70,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        DisableInput();
+        if (inputEnabled) DisableInput();
 
         // A speedier check to see if the pointer is over the board
         GameObject objectBelow = eventData.pointerCurrentRaycast.gameObject;

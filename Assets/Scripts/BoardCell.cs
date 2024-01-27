@@ -10,7 +10,7 @@ public class BoardCell : MonoBehaviour, IDropHandler
     // public bool IsOccupied { get; set; } = false;
     public Ship Occupant { get; set; } = null;
 
-    private void Awake()
+    private void OnEnable()
     {
         shipLayerCell = transform.parent.parent.GetChild(1).GetChild(transform.GetSiblingIndex());
     }
@@ -20,6 +20,10 @@ public class BoardCell : MonoBehaviour, IDropHandler
         if (Occupant != null)
         {
             Destroy(Occupant.gameObject);
+        }
+        if (shipLayerCell != null)
+        {
+            Destroy(shipLayerCell.gameObject);
         }
     }
 

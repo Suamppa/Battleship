@@ -8,8 +8,12 @@ public class Ship : MonoBehaviour
 {
     private GraphicRaycaster raycaster;
 
+    // Invoked on placement
     public event Action OnShipPlaced;
+    // Invoked on removal
     public event Action OnShipRemoved;
+    // Invoked if destroyed before first placement
+    public event Action OnShipCancelled;
 
     // Cell representation of the ship
     public List<Image> ShipCells { get; private set; }
@@ -27,11 +31,14 @@ public class Ship : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (OccupiedCells.Length > 0)
+        if (OccupiedCells.Length == 0)
         {
-            OnShipRemoved?.Invoke();
+            OnShipCancelled?.Invoke();
         }
-        SetOccupiedCells(new BoardCell[0]);
+        else
+        {
+            SetOccupiedCells(new BoardCell[0]);
+        }
     }
 
     public void DisableRaycastTargets()
@@ -52,6 +59,7 @@ public class Ship : MonoBehaviour
 
     public void SetOccupiedCells(BoardCell[] cells)
     {
+        if (OccupiedCells.Length > 0) OnShipRemoved?.Invoke();
         foreach (BoardCell cell in OccupiedCells)
         {
             if (cell != null)
