@@ -18,6 +18,9 @@ public class QuantityText : MonoBehaviour
         }
     }
 
+    public Color shipAvailableColor = Color.white;
+    public Color shipUnavailableColor = Color.red;
+
     private void Awake()
     {
         if (!TryGetComponent(out textComponent))
@@ -35,5 +38,10 @@ public class QuantityText : MonoBehaviour
     public void DecreaseQuantity()
     {
         Quantity--;
+    }
+
+    public void SetAvailability(bool available)
+    {
+        textComponent.color = available ? shipAvailableColor : shipUnavailableColor;
     }
 }

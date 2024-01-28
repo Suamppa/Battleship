@@ -19,14 +19,16 @@ public class Ship : MonoBehaviour
     public List<Image> ShipCells { get; private set; }
     // Cells occupied by the ship
     public BoardCell[] OccupiedCells { get; set; }
+    public int Size => ShipCells.Count;
 
     private void Awake()
     {
+        raycaster = GetComponentInParent<GraphicRaycaster>();
+        SetOccupiedCells(new BoardCell[0]);
         ShipCells = new(GetComponentsInChildren<Image>());
         // Remove the image of the ship
         ShipCells.RemoveAt(ShipCells.Count - 1);
-        raycaster = GetComponentInParent<GraphicRaycaster>();
-        OccupiedCells = new BoardCell[0];
+        Debug.Log($"{gameObject.name} awake. Ship Cells: {ShipCells.Count}, Size: {Size}");
     }
 
     private void OnDestroy()
@@ -59,14 +61,17 @@ public class Ship : MonoBehaviour
 
     public void SetOccupiedCells(BoardCell[] cells)
     {
-        if (OccupiedCells.Length > 0) OnShipRemoved?.Invoke();
-        foreach (BoardCell cell in OccupiedCells)
+        if (OccupiedCells != null)
         {
-            if (cell != null)
+            foreach (BoardCell cell in OccupiedCells)
             {
-                cell.Occupant = null;
-                Debug.Log($"{cell.name} no longer occupied");
+                if (cell != null)
+                {
+                    cell.Occupant = null;
+                    Debug.Log($"{cell.name} no longer occupied");
+                }
             }
+            if (OccupiedCells.Length > 0) OnShipRemoved?.Invoke();
         }
         OccupiedCells = cells;
         if (cells.Length > 0)

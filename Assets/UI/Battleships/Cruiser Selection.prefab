@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42dea9b613e5db94cb419219befabf89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShipPrefab: {fileID: 7052912201406135057, guid: a62ebc4d944ada54894824d56d662706, type: 3}
+  shipPrefab: {fileID: 7052912201406135057, guid: a62ebc4d944ada54894824d56d662706, type: 3}
 --- !u!1 &7220703584185097914
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,6 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2bfd8e15326ef4eb59217971489a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipAvailableColor: {r: 1, g: 1, b: 1, a: 1}
+  shipUnavailableColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &8612945676591706490
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,13 +6,34 @@ public class BoardCell : MonoBehaviour, IDropHandler
 {
     // Equivalent cell on the ship layer of the board
     private Transform shipLayerCell;
+    private Ship occupant;
+    private GameBoard gameBoard;
 
-    // public bool IsOccupied { get; set; } = false;
-    public Ship Occupant { get; set; } = null;
+    public Ship Occupant {
+        get { return occupant; }
+        set
+        {
+            if (value == null && occupant != null)
+            {
+                occupant = null;
+                gameBoard.CellsOccupied--;
+            }
+            else if (value != null && occupant == null)
+            {
+                occupant = value;
+                gameBoard.CellsOccupied++;
+            }
+            else
+            {
+                occupant = value;
+            }
+        }
+    }
 
     private void OnEnable()
     {
-        shipLayerCell = transform.parent.parent.GetChild(1).GetChild(transform.GetSiblingIndex());
+        gameBoard = GetComponentInParent<GameBoard>();
+        shipLayerCell = gameBoard.transform.GetChild(1).GetChild(transform.GetSiblingIndex());
     }
 
     private void OnDestroy()

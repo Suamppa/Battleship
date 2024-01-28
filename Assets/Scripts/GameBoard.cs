@@ -11,7 +11,10 @@ public class GameBoard : MonoBehaviour
     // GameObject used to instantiate ship layer cells
     private GameObject shipLayerCell;
 
+    public static GameBoard ActiveBoard { get; private set; }
+
     public List<BoardCell> Cells { get; private set; }
+    public int CellsOccupied { get; set; } = 0;
     public int Height => GameOptionsProvider.BoardHeight;
     public int Width => GameOptionsProvider.BoardWidth;
 
@@ -39,7 +42,13 @@ public class GameBoard : MonoBehaviour
 
     private void OnEnable()
     {
+        MakeActiveBoard();
         ResizeBoard();
+    }
+
+    public void MakeActiveBoard()
+    {
+        ActiveBoard = this;
     }
 
     // Fills the board with cells
