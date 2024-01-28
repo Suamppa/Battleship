@@ -54,10 +54,20 @@ public class GameBoard : MonoBehaviour
         shipLayerCellTransform.offsetMax = cellPrefabTransform.offsetMax;
     }
 
+    private void Start()
+    {
+        GameOptionsProvider.OnGameOptionsUpdated += ResizeBoard;
+        ResizeBoard();
+    }
+
+    private void OnDestroy()
+    {
+        GameOptionsProvider.OnGameOptionsUpdated -= ResizeBoard;
+    }
+
     private void OnEnable()
     {
         MakeActiveBoard();
-        ResizeBoard();
     }
 
     public void MakeActiveBoard()
