@@ -17,9 +17,14 @@ public class GameOptionsProvider : MonoBehaviour
     // Singleton instance
     public static GameOptionsProvider Instance { get; private set; }
 
+    public const string PlayerOneDefaultName = "Player 1";
+    public const string PlayerTwoDefaultName = "Player 2";
     public const int minBoardLength = 5;
     public const int minShipArea = minBoardLength * minBoardLength / 2;
 
+    public static string PlayerOneName { get; set; } = PlayerOneDefaultName;
+    public static string PlayerTwoName { get; set; } = PlayerTwoDefaultName;
+    
     // Individual properties for the game options
     public static int BoardWidth { get; private set; } = minBoardLength;
     public static int BoardHeight { get; private set; } = minBoardLength;
