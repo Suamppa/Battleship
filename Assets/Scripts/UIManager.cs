@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
         // Disable all children, then enable the initial elements
         foreach (Transform child in transform)
         {
-            if (!child.CompareTag("Persistent"))
+            if (!child.CompareTag("Persistent") && child.gameObject.activeSelf)
             {
                 child.gameObject.SetActive(false);
             }
@@ -118,7 +118,10 @@ public class UIManager : MonoBehaviour
         {
             List<GameObject> fromElements = history.Pop();
             List<GameObject> toElements = history.Peek();
+            Debug.Log($"Going back from {fromElements[0].name} to {toElements[0].name}");
             SwitchElements(fromElements.ToArray(), toElements.ToArray());
+            // Avoid history loop, because ActivateElements pushes to history
+            history.Pop();
         }
     }
 }

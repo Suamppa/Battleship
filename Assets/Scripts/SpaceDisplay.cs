@@ -15,7 +15,7 @@ public class SpaceDisplay : MonoBehaviour
     private void Start()
     {
         GameOptionsProvider.OnGameOptionsUpdated += UpdateSpaceDisplay;
-        // UpdateSpaceDisplay();
+        UpdateSpaceDisplay();
     }
 
     private void OnDestroy()

@@ -9,6 +9,8 @@ public class GameOptionsProvider : MonoBehaviour
     private const string BoardHeightKey = "boardHeight";
     private const string MaxNumberOfShipsKey = "maxNumberOfShips";
 
+    private static string playerOneName = PlayerOneDefaultName;
+    private static string playerTwoName = PlayerTwoDefaultName;
     // Dictionary for holding the game options as a collection
     private static Dictionary<string, int> gameOptions;
 
@@ -22,8 +24,25 @@ public class GameOptionsProvider : MonoBehaviour
     public const int minBoardLength = 5;
     public const int minShipArea = minBoardLength * minBoardLength / 2;
 
-    public static string PlayerOneName { get; set; } = PlayerOneDefaultName;
-    public static string PlayerTwoName { get; set; } = PlayerTwoDefaultName;
+    public static string PlayerOneName
+    {
+        get { return playerOneName; }
+        set
+        {
+            playerOneName = value;
+            OnGameOptionsUpdated?.Invoke();
+        }
+    }
+
+    public static string PlayerTwoName
+    {
+        get { return playerTwoName; }
+        set
+        {
+            playerTwoName = value;
+            OnGameOptionsUpdated?.Invoke();
+        }
+    }
     
     // Individual properties for the game options
     public static int BoardWidth { get; private set; } = minBoardLength;

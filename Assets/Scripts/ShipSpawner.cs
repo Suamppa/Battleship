@@ -20,7 +20,6 @@ public class ShipSpawner : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         spawners.Add(this);
         spawnedShips = new List<GameObject>();
-        quantityText = GetComponentInChildren<QuantityText>();
 
         // Ship prefab needs to be instantiated to wake up the Ship component
         shipToSpawn = Instantiate(shipPrefab, transform);
@@ -37,6 +36,8 @@ public class ShipSpawner : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     private void OnEnable()
     {
+        quantityText = GetComponentInChildren<QuantityText>();
+        
         spaceDisplay = GameObject.FindWithTag("SpaceDisplay").GetComponent<SpaceDisplay>();
         Debug.Log($"Space display set to {spaceDisplay.gameObject.name}");
 

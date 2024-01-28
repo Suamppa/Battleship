@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +11,24 @@ public class GameBoard : MonoBehaviour
     private RectTransform shipLayerTransform;
     // GameObject used to instantiate ship layer cells
     private GameObject shipLayerCell;
+    private int cellsOccupied = 0;
+
+    public event Action OnBoardStateChanged;
 
     public static GameBoard ActiveBoard { get; private set; }
 
     public List<BoardCell> Cells { get; private set; }
-    public int CellsOccupied { get; set; } = 0;
+    
+    public int CellsOccupied
+    {
+        get => cellsOccupied;
+        set
+        {
+            cellsOccupied = value;
+            OnBoardStateChanged?.Invoke();
+        }
+    }
+
     public int Height => GameOptionsProvider.BoardHeight;
     public int Width => GameOptionsProvider.BoardWidth;
 

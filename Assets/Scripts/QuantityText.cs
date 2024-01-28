@@ -23,10 +23,7 @@ public class QuantityText : MonoBehaviour
 
     private void Awake()
     {
-        if (!TryGetComponent(out textComponent))
-        {
-            Debug.LogError("No quantity text found");
-        }
+        textComponent = GetComponent<TMP_Text>();
         Quantity = 0;
     }
 
