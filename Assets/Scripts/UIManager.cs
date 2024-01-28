@@ -124,4 +124,9 @@ public class UIManager : MonoBehaviour
             history.Pop();
         }
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
