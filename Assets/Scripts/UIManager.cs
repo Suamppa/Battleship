@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Class for controlling the UI flow within a scene
 public class UIManager : MonoBehaviour
@@ -16,6 +18,7 @@ public class UIManager : MonoBehaviour
 
     // Elements to activate on start
     public GameObject[] initialElements;
+    public GameObject battleUI;
 
     private void Awake()
     {
@@ -125,8 +128,34 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void QuitGame()
+    public static void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void StartBattle()
+    {
+        // If the battle scene is already loaded, don't load it again
+        if (SceneManager.GetSceneByBuildIndex(1).isLoaded) return;
+
+        battleUI.SetActive(true);
+        
+        GameObject.FindWithTag("Persistent").transform.SetParent(battleUI.transform);
+        foreach (GameBoard board in GameBoard.GameBoards)
+        {
+            board.transform.SetParent(battleUI.transform);
+        }
+        DontDestroyOnLoad(battleUI);
+
+        ShowLoadingScreen();
+
+        Debug.Log("Loading battle scene");
+        SceneManager.LoadSceneAsync(1);
+    }
+
+    private void ShowLoadingScreen()
+    {
+        GameObject loadingScreen = transform.GetChild(transform.childCount - 1).gameObject;
+        loadingScreen.SetActive(true);
     }
 }

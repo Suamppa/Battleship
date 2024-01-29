@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // An intermediary class for bundling up the selected options from the UI elements
 public class GameOptionsProvider : MonoBehaviour
@@ -78,6 +79,8 @@ public class GameOptionsProvider : MonoBehaviour
 
     public static void UpdateGameOptions()
     {
+        if (SceneManager.GetActiveScene().buildIndex != 0) return;
+
         BoardWidth = Instance.boardWidthDropdown.Value;
         BoardHeight = Instance.boardHeightDropdown.Value;
         MaxShipArea = Instance.shipNumberSlider.MaxShipArea;

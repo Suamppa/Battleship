@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(RectTransform))]
 public class GameBoard : MonoBehaviour
 {
+
     private RectTransform gridTransform;
     // Separate ship layer prevents cell outlines clipping over ships
     private RectTransform shipLayerTransform;
@@ -15,7 +16,9 @@ public class GameBoard : MonoBehaviour
 
     public event Action OnBoardStateChanged;
 
+    public static readonly List<GameBoard> GameBoards = new();
     public static GameBoard ActiveBoard { get; private set; }
+    public static GameBoard OtherBoard => GameBoards.Find(board => board != ActiveBoard);
 
     public List<BoardCell> Cells { get; private set; }
     
@@ -36,6 +39,8 @@ public class GameBoard : MonoBehaviour
 
     private void Awake()
     {
+        GameBoards.Add(this);
+
         gridTransform = transform.GetChild(0).GetComponent<RectTransform>();
         shipLayerTransform = transform.GetChild(1).GetComponent<RectTransform>();
         Cells = new(gridTransform.GetComponentsInChildren<BoardCell>());
@@ -73,6 +78,11 @@ public class GameBoard : MonoBehaviour
     public void MakeActiveBoard()
     {
         ActiveBoard = this;
+    }
+
+    public void SwitchBoards()
+    {
+        OtherBoard.MakeActiveBoard();
     }
 
     // Fills the board with cells
