@@ -1,14 +1,10 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // Class for controlling the UI flow within a scene
 public class UIManager : MonoBehaviour
 {
-    // public delegate void PanelSwitchedEventHandler();
-    // public event PanelSwitchedEventHandler PanelSwitched;
-
     // History of screens visited, item at the top is the current screen
     private static Stack<List<GameObject>> history;
 
